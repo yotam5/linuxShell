@@ -11,6 +11,7 @@
 #define FORK_ERROR -1
 #define EXECVE_FAILED -1
 #define PBUFF_SIZE 128
+#define MAX_USERNAME_LENGTH 64
 #define MAX_CMD_LENGTH 256
 
 void initCmd(char directory[]);

@@ -33,10 +33,18 @@ int main(int argc, char *argv[], char *evnp[])
 
 void type_prompt()
 {
+  /*finds the user's name*/
+  char *loginBuff;
+  loginBuff = (char*)malloc(MAX_USERNAME_LENGTH*sizeof(char));
+  cuserid(loginBuff);
+
+  /*finds the current working directory*/
   char pbuff[PBUFF_SIZE] = {0};
   size_t size = {PBUFF_SIZE};
   getcwd(pbuff, size);
-  printf("\e[1;32m\nuser@@\e[0m:");
+  
+  /*prints colorful prompt*/
+  printf("\e[1;32m\n%s@@\e[0m:", loginBuff);
   printf ("\e[1;34m%s\e[0m$ ", pbuff);
 }
 
