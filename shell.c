@@ -13,13 +13,12 @@ int main(int argc, char *argv[], char *evnp[])
       initCmd(&directory);
       type_prompt();
       getCmd(&directory, argv_child, evnp_child);
-      argc_child = getArgv(argv_child);
+      argc_child = getArgv(argv_child); /* getArgv() returns the arguments' amount. we add 1 because argv[0] contains the cmd*/
       /*printCurrState(&directory, argv_child, evnp_child);*/
       printArgs(argc_child, argv_child);
       int cpid = fork();
       if(cpid == FORK_ERROR)
       {
-        perror("error while fork()\n");
         exit(1);
       }
       if(cpid)
@@ -29,6 +28,8 @@ int main(int argc, char *argv[], char *evnp[])
       }
       else
         {
+        printf("argc: %d\n", argc_child);
+        printCurrState(&directory, argv_child, evnp_child);
          if (execve((const char*)directory, argv_child, evnp_child) == EXECVE_FAILED)
               printf("%s: command not found\n", argv_child[0]);
         }
@@ -105,7 +106,7 @@ int getArgv(char *argv_child[])
   }
   /*perror("after if");*/
   free(line);
-  return argc_child;
+  return argc_child - 1;
 }
 
 /*DEBUGGING TOOLS*/
@@ -119,7 +120,7 @@ void printArgs(int argc, char *argv[])
 {
   printf("\e[1;31marguments:\e[0m\n");
   int i = {0};
-  for(i; i < argc; ++i)
+  for(i; i <= argc; ++i)
     {
       printf("The %d argument is: %s\n", i, argv[i]);
     }
