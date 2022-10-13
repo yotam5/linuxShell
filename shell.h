@@ -6,8 +6,10 @@
 #include <string.h> /* for strcpy() */
 #include <unistd.h>
 #include <sys/wait.h>
+#include <ctype.h> /* for isspace() */ 
 
 #define true 1
+#define false 0
 #define FORK_ERROR -1
 #define EXECVE_FAILED -1
 #define PBUFF_SIZE 128
@@ -17,6 +19,9 @@
 void initCmd(char directory[]);
 void type_prompt();
 void getCmd(char directory[], char *argv_child[], char *evnp_child[]);
+int getArgv(char *argv_child[]);
 void printCurrState(char directory[], char *argv_child[], char *evnp_child[]);
+void printArgs(int argc, char *argv[]);
+int isEmpty(char *line);
 
 #endif
