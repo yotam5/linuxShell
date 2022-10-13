@@ -21,8 +21,11 @@ int main(int argc, char *argv[], char *evnp[])
       }
       if(cpid)
         waitpid(-1, &status, 0);
-      else 
-        execve((const char*)directory, argv_child, evnp_child);
+      else
+        {
+        if (execve((const char*)directory, argv_child, evnp_child) == EXECVE_FAILED)
+              printf("%s: command not found\n", argv_child[0]);
+        }
       free(argv_child[0]);
   }
   return 0;
@@ -36,6 +39,7 @@ void type_prompt()
   printf("\e[1;32m\nuser@@\e[0m:");
   printf ("\e[1;34m%s\e[0m$ ", pbuff);
 }
+
 
 void initCmd(char directory[])
 {
