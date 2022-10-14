@@ -24,5 +24,7 @@ int getArgv(char *argv_child[]);
 void printCurrState(char directory[], char *argv_child[], char *evnp_child[]);
 void printArgs(int argc, char *argv[]);
 int isEmpty(char *line);
+int lastCharIsEnter(char *line);
+char* removeEnter(char *line);
 
 #endif

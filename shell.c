@@ -95,8 +95,15 @@ int getArgv(char *argv_child[])
     /*printf("first token: <%s>\n", token);*/
     while(token)
       {
-        if(isEmpty(token)) /* to be checked if there is a better option */
+        if(isEmpty(token)) 
           break;
+        if(lastCharIsEnter(token))
+        {
+          token = removeEnter(token);
+          argv_child[argc_child] = (char*)malloc(strlen(token));
+          strncpy(argv_child[argc_child], token, strlen(token));
+          return argc_child;
+        }
         argv_child[argc_child] = (char*)malloc(strlen(token));
         strcpy(argv_child[argc_child], token);
         /*printf("token: %s\n", token);
@@ -151,4 +158,17 @@ int isEmpty(char *line)
       ++currChar;
     }
   return true;
+}
+
+int lastCharIsEnter(char *line)
+{
+  return(line[strlen(line) - 1] == '\n');
+}
+
+char* removeEnter(char *line)
+{
+  /*char *token = NULL;
+  token = strtok(line, )
+  printf("")*/
+  return(strtok(line, "\n"));
 }
