@@ -17,6 +17,7 @@
 #define MAX_CMD_LENGTH 256
 
 void initCmd(char directory[]);
+void freeArgs(int argc, char *argv[]);
 void type_prompt();
 void getCmd(char directory[], char *argv_child[], char *evnp_child[]);
 int getArgv(char *argv_child[]);

@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[], char *evnp[])
 {
-  char *argv_child[] = {NULL, NULL};
+  char *argv_child[] = {NULL, NULL, NULL, NULL};
   char *evnp_child[] = {NULL};
   char directory[MAX_CMD_LENGTH] = {0};
   int argc_child = {0};
@@ -13,7 +13,7 @@ int main(int argc, char *argv[], char *evnp[])
       initCmd(&directory);
       type_prompt();
       getCmd(&directory, argv_child, evnp_child);
-      argc_child = getArgv(argv_child); /* getArgv() returns the arguments' amount. we add 1 because argv[0] contains the cmd*/
+      argc_child = getArgv(argv_child); /* getArgv() returns the arguments' amount */
       /*printCurrState(&directory, argv_child, evnp_child);*/
       printArgs(argc_child, argv_child);
       int cpid = fork();
@@ -33,7 +33,7 @@ int main(int argc, char *argv[], char *evnp[])
          if (execve((const char*)directory, argv_child, evnp_child) == EXECVE_FAILED)
               printf("%s: command not found\n", argv_child[0]);
         }
-      free(argv_child[0]);
+      freeArgs(argc_child, argv_child);
   }
   return 0;
 }
@@ -53,6 +53,8 @@ void type_prompt()
   /*prints colorful prompt*/
   printf("\e[1;32m\n%s@@\e[0m:", loginBuff);
   printf ("\e[1;34m%s\e[0m$ ", pbuff);
+
+  free(loginBuff); 
 }
 
 
@@ -74,13 +76,14 @@ void getCmd(char directory[], char *argv_child[], char *evnp_child[])
 int getArgv(char *argv_child[])
 {
   int argc_child = {1};
-  char *line = NULL;
+  char *line = {0};
   size_t len = 0;
   ssize_t lineSize = 0;
 
   /*perror("befor if");*/
   if(getline(&line, &len, stdin))
   {
+    /*printf("line: %s\n", line);*/
     if(isEmpty(line))
       return 0;
    /* perror("inside if");
@@ -88,15 +91,16 @@ int getArgv(char *argv_child[])
     char *token = NULL;
     /*perror("before strtok");*/
     token = strtok(line, " ");
-    /*perror("after strtok");
-    printf("first token: <%s>\n", token);*/
+    /*perror("after strtok");*/
+    /*printf("first token: <%s>\n", token);*/
     while(token)
       {
         if(isEmpty(token)) /* to be checked if there is a better option */
           break;
         argv_child[argc_child] = (char*)malloc(strlen(token));
         strcpy(argv_child[argc_child], token);
-        /*printf("%s\n", token);*/
+        /*printf("token: %s\n", token);
+        printf("argv[%d]: %s\n", argc_child, argv_child[argc_child]);*/
         ++argc_child;
         token = strtok(NULL, " ");
       }
@@ -105,8 +109,16 @@ int getArgv(char *argv_child[])
     strcpy(argv_child[i], arg);*/
   }
   /*perror("after if");*/
-  free(line);
   return argc_child - 1;
+}
+
+void freeArgs(int argc, char *argv[])
+{
+  int i = {0};
+  for(i; i <= argc; ++i)
+    {
+      free(argv[i]);
+    }
 }
 
 /*DEBUGGING TOOLS*/
