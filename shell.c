@@ -10,9 +10,9 @@ int main(int argc, char *argv[], char *evnp[])
 
   while(true)
     {
-      initCmd(&directory);
+      initCmd(directory);
       type_prompt();
-      getCmd(&directory, argv_child, evnp_child);
+      getCmd(directory, argv_child, evnp_child);
       argc_child = getArgv(argv_child); /* getArgv() returns the arguments' amount */
       /*printCurrState(&directory, argv_child, evnp_child);*/
       printArgs(argc_child, argv_child);
@@ -29,7 +29,7 @@ int main(int argc, char *argv[], char *evnp[])
       else
         {
         printf("argc: %d\n", argc_child);
-        printCurrState(&directory, argv_child, evnp_child);
+        printCurrState(directory, argv_child, evnp_child);
          if (execve((const char*)directory, argv_child, evnp_child) == EXECVE_FAILED)
               printf("%s: command not found\n", argv_child[0]);
         }
